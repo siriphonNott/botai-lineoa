@@ -8,6 +8,13 @@ app.use(express.json());
 // CORS
 app.use(cors());
 
+app.get("/version", (req, res) => {
+  res.send({
+    version: '1.0.0',
+  });
+  console.log("GET [/version]");
+});
+
 app.get("/", (req, res) => {
   res.send({
     ok: true,
