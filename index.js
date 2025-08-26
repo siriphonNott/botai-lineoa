@@ -112,7 +112,15 @@ app.post("/webhook", (req, res) => {
             }]
           });
         }
-      }
+      } else {
+        client.replyMessage({
+          replyToken: event.replyToken,
+          messages: [{
+            type: 'text',
+            text: message.text + ' - 😍' ,
+          }]
+        });
+    }
     }
   }
 
