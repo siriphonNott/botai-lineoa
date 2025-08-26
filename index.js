@@ -3,6 +3,9 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 4100;
 
+// static
+app.use(express.static('public'))
+
 // LINE SDK
 const lineBotSdk = require('@line/bot-sdk')
 // create LINE SDK config from env variables
