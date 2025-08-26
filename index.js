@@ -117,7 +117,7 @@ app.post("/webhook", (req, res) => {
           replyToken: event.replyToken,
           messages: [{
             type: 'text',
-            text: message.text + ' - 😍' ,
+            text: message.text + ' - Reply from BOT AI' ,
           }]
         });
     }
