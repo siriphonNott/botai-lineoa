@@ -54,6 +54,33 @@ app.get("/", (req, res) => {
 app.get("/webhook", (req, res) => {
   console.log("GET [/webhook]:", req.query);
 
+  const event = req.body.events[0];
+  console.log('[event.source object]:', JSON.stringify(event.source));
+
+  if (event.type === 'message') {
+    const message = event.message;
+    console.log('[message object]:', JSON.stringify(message));
+    
+    if (message.type === 'text') {
+      // BYE
+      if (message.text === 'bye') {
+        if (event.source.type === 'room') {
+          client.leaveRoom(event.source.roomId);
+        } else if (event.source.type === 'group') {
+          client.leaveGroup(event.source.groupId);
+        } else {
+          client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [{
+              type: 'text',
+              text: 'I cannot leave a 1-on-1 chat!',
+            }]
+          });
+        }
+      }
+    }
+  }
+
   res.send({
     success: true,
   });
@@ -61,6 +88,33 @@ app.get("/webhook", (req, res) => {
 
 app.post("/webhook", (req, res) => {
   console.log("POST [/webhook]:", req.body);
+
+  const event = req.body.events[0];
+  console.log('[event.source object]:', JSON.stringify(event.source));
+
+  if (event.type === 'message') {
+    const message = event.message;
+    console.log('[message object]:', JSON.stringify(message));
+    
+    if (message.type === 'text') {
+      // BYE
+      if (message.text === 'bye') {
+        if (event.source.type === 'room') {
+          client.leaveRoom(event.source.roomId);
+        } else if (event.source.type === 'group') {
+          client.leaveGroup(event.source.groupId);
+        } else {
+          client.replyMessage({
+            replyToken: event.replyToken,
+            messages: [{
+              type: 'text',
+              text: 'I cannot leave a 1-on-1 chat!',
+            }]
+          });
+        }
+      }
+    }
+  }
 
   res.send({
     success: true,
