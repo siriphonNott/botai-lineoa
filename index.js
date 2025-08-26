@@ -66,7 +66,7 @@ app.post("/webhook", (req, res) => {
 
 app.post("/send-message", async (req, res) => {
   console.log("POST [/send-message]:", req.body);
-  
+
   try {
     await client.pushMessage({
       to: req.body.userId,
@@ -76,7 +76,8 @@ app.post("/send-message", async (req, res) => {
       success: true,
     });
   } catch (error) {
-     res.status(400).send(error);
+    console.log('Error [/send-message]:', error);
+    res.status(400).send(error);
   }
 });
 
