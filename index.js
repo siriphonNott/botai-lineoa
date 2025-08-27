@@ -104,6 +104,11 @@ app.post('/:uid/webhook', async (req, res) => {
               replyToken: event.replyToken,
               messages: messageTypes.greeting(message.text),
             })
+          } else if (['โปรเด็ด', 'โปรวันนี้'].some((v) => v === message.text.toLocaleLowerCase())) {
+            await client.replyMessage({
+              replyToken: event.replyToken,
+              messages: messageTypes.promotionDetail(),
+            })
           } else if (['promo', 'promotion', 'โปร', 'โปรโมชั่น'].some((v) => v === message.text.toLocaleLowerCase())) {
             await client.replyMessage({
               replyToken: event.replyToken,
