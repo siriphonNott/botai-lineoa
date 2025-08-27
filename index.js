@@ -1,5 +1,5 @@
-import express from 'express';
-import cors from 'cors';
+import express from 'express'
+import cors from 'cors'
 
 const app = express()
 const port = process.env.PORT || 4100
@@ -11,8 +11,8 @@ import { channels } from './mock/db.js'
 app.use(express.static('public'))
 
 // LINE SDK
-import { messagingApi } from '@line/bot-sdk';
-const { MessagingApiClient } = messagingApi;
+import { messagingApi } from '@line/bot-sdk'
+const { MessagingApiClient } = messagingApi
 
 // create LINE SDK config from env variables
 const config = {
@@ -28,8 +28,8 @@ const config = {
 // create LINE SDK client
 const createClientInstance = (channelAccessToken) => {
   return new MessagingApiClient({
-    channelAccessToken
-  });
+    channelAccessToken,
+  })
 }
 
 app.use(express.json())
@@ -67,7 +67,7 @@ app.post('/:uid/webhook', async (req, res) => {
   if (!channel) return res.status(404).send({ errMsg: 'Channel not found' })
 
   const client = createClientInstance(channel.channelAccessToken)
-  
+
   try {
     const event = req.body.events[0] // join, leave, message
     // Have Event
@@ -80,7 +80,7 @@ app.post('/:uid/webhook', async (req, res) => {
 
         if (message.type === 'text') {
           // BYE
-          if (message.text === 'bye') {
+          if (message.text.toLocaleLowerCase() === 'bye') {
             if (event.source.type === 'room') {
               await client.leaveRoom(event.source.roomId)
             } else if (event.source.type === 'group') {
@@ -96,7 +96,9 @@ app.post('/:uid/webhook', async (req, res) => {
                 ],
               })
             }
-          } else if (['hi', 'hello', 'สวัสดี', 'ดี'].some((v) => v === message.text.toLocaleLowerCase())) {
+          } else if (
+            ['hi', 'hello', 'สวัสดี', 'ดี'].some((v) => v === message.text.toLocaleLowerCase())
+          ) {
             await client.replyMessage({
               replyToken: event.replyToken,
               messages: [
@@ -108,6 +110,17 @@ app.post('/:uid/webhook', async (req, res) => {
                   type: 'sticker',
                   packageId: '11537',
                   stickerId: ['52002734', '52002738', '52002736'][Math.floor(Math.random() * 3)],
+                },
+              ],
+            })
+          } else if (message.text.includes('สมัคร')) {
+            await client.replyMessage({
+              replyToken: event.replyToken,
+              messages: [
+                {
+                  type: 'image',
+                  originalContentUrl: 'https://online.anyflip.com/tdqbv/mnns/files/mobile/1.jpg',
+                  previewImageUrl: 'https://online.anyflip.com/tdqbv/mnns/files/mobile/1.jpg',
                 },
               ],
             })
