@@ -124,6 +124,9 @@ app.post('/:uid/webhook', async (req, res) => {
           }
         }
       }
+    } else {
+      // Verify webhook
+      return res.send(req.body.events)
     }
   } catch (error) {
     console.log('Error [webhook]:', error)
