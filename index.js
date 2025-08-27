@@ -6,6 +6,7 @@ const port = process.env.PORT || 4100
 
 // Import Mock Data
 import { channels } from './mock/db.js'
+import { messageTypes } from './mock/messageTypes.js'
 
 // static
 app.use(express.static('public'))
@@ -101,38 +102,22 @@ app.post('/:uid/webhook', async (req, res) => {
           ) {
             await client.replyMessage({
               replyToken: event.replyToken,
-              messages: [
-                {
-                  type: 'text',
-                  text: message.text + ' - Reply from BOT AI',
-                },
-                {
-                  type: 'sticker',
-                  packageId: '11537',
-                  stickerId: ['52002734', '52002738', '52002736'][Math.floor(Math.random() * 3)],
-                },
-              ],
+              messages: messageTypes.greeting(message.text),
+            })
+          } else if (['promo', 'promotion', 'โปร', 'โปรโมชั่น'].some((v) => v === message.text.toLocaleLowerCase())) {
+            await client.replyMessage({
+              replyToken: event.replyToken,
+              messages: messageTypes.promotions(),
             })
           } else if (message.text.includes('สมัคร')) {
             await client.replyMessage({
               replyToken: event.replyToken,
-              messages: [
-                {
-                  type: 'image',
-                  originalContentUrl: 'https://online.anyflip.com/tdqbv/mnns/files/mobile/1.jpg',
-                  previewImageUrl: 'https://online.anyflip.com/tdqbv/mnns/files/mobile/1.jpg',
-                },
-              ],
+              messages: messageTypes.regsiter(),
             })
           } else {
             await client.replyMessage({
               replyToken: event.replyToken,
-              messages: [
-                {
-                  type: 'text',
-                  text: message.text + ' - Reply from BOT AI',
-                },
-              ],
+              messages: messageTypes.reply(message.text),
             })
           }
         }
