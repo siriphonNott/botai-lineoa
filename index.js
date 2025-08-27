@@ -83,7 +83,7 @@ app.post('/webhook', async (req, res) => {
                 ],
               })
             }
-          } else if (['hi', 'hello', 'สวัสดี', 'ดี'].some((v) => v === text.toLocaleLowerCase())) {
+          } else if (['hi', 'hello', 'สวัสดี', 'ดี'].some((v) => v === message.text.toLocaleLowerCase())) {
             await client.replyMessage({
               replyToken: event.replyToken,
               messages: [
