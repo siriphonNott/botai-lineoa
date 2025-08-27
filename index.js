@@ -1,13 +1,19 @@
-const express = require('express')
-const cors = require('cors')
+import express from 'express';
+import cors from 'cors';
+
 const app = express()
 const port = process.env.PORT || 4100
+
+// Import Mock Data
+import { channels } from './mock/db.js'
 
 // static
 app.use(express.static('public'))
 
 // LINE SDK
-const lineBotSdk = require('@line/bot-sdk')
+import { messagingApi } from '@line/bot-sdk';
+const { MessagingApiClient } = messagingApi;
+
 // create LINE SDK config from env variables
 const config = {
   channelSecret: process.env.CHANNEL_SECRET,
@@ -20,14 +26,24 @@ const config = {
 // })
 
 // create LINE SDK client
-const client = new lineBotSdk.messagingApi.MessagingApiClient({
-  channelAccessToken: config.channelAccessToken,
-})
+const createClientInstance = (channelAccessToken) => {
+  return new MessagingApiClient({
+    channelAccessToken
+  });
+}
 
 app.use(express.json())
 
 // CORS
 app.use(cors())
+
+app.get('/', (req, res) => {
+  console.log('GET [/]:', req.query)
+
+  res.send({
+    ok: true,
+  })
+})
 
 app.get('/version', (req, res) => {
   res.send({
@@ -42,22 +58,19 @@ app.get('/config', (req, res) => {
   res.send(config)
 })
 
-app.get('/', (req, res) => {
-  console.log('GET [/]:', req.query)
-
-  res.send({
-    ok: true,
-  })
-})
-
-app.post('/webhook', async (req, res) => {
+app.post('/:uid/webhook', async (req, res) => {
   console.log('POST [/webhook]:', req.body)
 
-  const event = req.body.events[0] // join, leave, message
+  const channel = channels.find((v) => v.uid === req.params.uid)
 
-  // Have Event
+  // Check channel
+  if (!channel) return res.status(404).send({ errMsg: 'Channel not found' })
 
+  const client = createClientInstance(channel.channelAccessToken)
+  
   try {
+    const event = req.body.events[0] // join, leave, message
+    // Have Event
     if (event) {
       console.log('[event.source object]:', JSON.stringify(event.source))
 
