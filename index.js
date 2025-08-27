@@ -15,9 +15,9 @@ const config = {
 }
 
 // middleware
-lineBotSdk.middleware({
-  channelSecret: config.channelSecret,
-})
+// lineBotSdk.middleware({
+//   channelSecret: config.channelSecret,
+// })
 
 // create LINE SDK client
 const client = new lineBotSdk.messagingApi.MessagingApiClient({
