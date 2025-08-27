@@ -71,9 +71,9 @@ app.post("/webhook", async (req, res) => {
           // BYE
           if (message.text === 'bye') {
             if (event.source.type === 'room') {
-              client.leaveRoom(event.source.roomId);
+              await client.leaveRoom(event.source.roomId);
             } else if (event.source.type === 'group') {
-              client.leaveGroup(event.source.groupId);
+              await client.leaveGroup(event.source.groupId);
             } else {
               client.replyMessage({
                 replyToken: event.replyToken,
