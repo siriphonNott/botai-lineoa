@@ -157,4 +157,13 @@ app.post('/send-message', async (req, res) => {
   }
 })
 
+// Telegram
+app.post('/telegram/webhook', async (req, res) => {
+  console.log('POST [/telegram/webhook]:', JSON.stringify(req.body))
+
+  res.send({
+    success: true,
+  })
+})
+
 app.listen(port, console.log(`Server is running on port ${port}`))
