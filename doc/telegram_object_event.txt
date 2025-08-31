@@ -1,0 +1,135 @@
+Telegame webhook events:
+
+Private chat:
+  - text: 
+    message.from
+      - id
+      - is_bot
+      - first_name
+      - username
+      - language_code
+      - is_premium
+    message.chat
+      - id
+      - first_name
+      - username
+      - type
+    message.date
+    message.text
+  
+  - command
+    message.text
+    message.entities[0].type === 'command'
+
+  - sticker
+    message.sticker {}
+
+  - photo
+    message.photo []
+
+  - document
+    message.document
+      - file_name:
+      - mime_type:
+      - thumbnail: {
+          "file_id":
+          "file_unique_id":
+          "file_size":
+          "width":
+          "height":
+        }
+      - thumb: {
+          "file_id":
+          "file_unique_id":
+          "file_size":
+          "width":
+          "height":
+        }
+      - file_id:
+      - file_unique_id:
+      - file_size:
+
+Group chat:
+  - text:
+    message.from
+      - id
+      - is_bot
+      - first_name
+      - username
+      - language_code
+      - is_premium
+    message.chat
+      - id
+      - first_name
+      - username
+      - type
+    message.date
+    message.text
+    message.entities[0].type === 'command'
+
+  - join:
+    message.new_chat_member
+    message.chat
+      id: -4890178162,
+      title: "Test BOT Telegram",
+      type: "group",
+      all_members_are_administrators: true
+
+  - leave:
+    message.left_chat_member
+    message.chat
+      id: -4890178162,
+      title: "Test BOT Telegram",
+      type: "group",
+      all_members_are_administrators: true
+
+Channel chat:
+  - text:
+    channel_post: {
+      "message_id": 8,
+      "sender_chat": {
+        "id": -1002812102637,
+        "title": "Test BOT Telegram Channel",
+        "username": "bottest_9",
+        "type": "channel"
+      },
+      "chat": {
+        "id": -1002812102637,
+        "title": "Test BOT Telegram Channel",
+        "username": "bottest_9",
+        "type": "channel"
+      },
+      "date": 1756651164,
+      "text": "Hello"
+    }
+  
+  - sticker:
+    channel_post: {
+      ...
+      sticker: {}
+    }
+
+  - photo:
+    channel_post: {
+      ...
+      photo: []
+    }
+
+  - document:
+    channel_post: {
+      ...
+      document: {}
+    }
+    
+  - command
+    channel_post: {
+      ...
+      "text": "/start",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 6,
+          "type": "bot_command"
+        }
+      ]
+    }
