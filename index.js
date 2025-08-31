@@ -59,6 +59,16 @@ app.get('/config', (req, res) => {
   res.send(config)
 })
 
+// Telegram
+app.post('/telegram/webhook', async (req, res) => {
+  console.log('POST [/telegram/webhook]:', JSON.stringify(req.body))
+
+  res.send({
+    success: true,
+  })
+})
+
+// LINE
 app.post('/:uid/webhook', async (req, res) => {
   console.log('POST [/webhook]:', req.body)
 
@@ -155,15 +165,6 @@ app.post('/send-message', async (req, res) => {
     console.log('Error [/send-message]:', error)
     res.status(400).send(error)
   }
-})
-
-// Telegram
-app.post('/telegram/webhook', async (req, res) => {
-  console.log('POST [/telegram/webhook]:', JSON.stringify(req.body))
-
-  res.send({
-    success: true,
-  })
 })
 
 app.listen(port, console.log(`Server is running on port ${port}`))
